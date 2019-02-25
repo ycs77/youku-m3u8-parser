@@ -20,14 +20,16 @@
 
 ## 使用
 
-下載程式碼：
+執行：
 
 ```
 git clone git@github.com:ycs77/youku-m3u8-parser.git
 cd youku-m3u8-parser
+npm install
+mkdir input
 ```
 
-**新增 `input` 資料夾**，將剛才下載的 m3u8 檔移至該資料夾裡。命名為 `my-video.m3u8` (`my-video` 為自訂影片名稱)。
+將剛才下載的 m3u8 檔移至 `input` 資料夾裡。命名為 `my-video.m3u8` (`my-video` 為自訂影片名稱)。
 
 執行：
 
@@ -35,7 +37,7 @@ cd youku-m3u8-parser
 node ./bin/youku-m3u8-parser --name my-video
 ```
 
-執行完成後，影片將會出現在 `output` 資料夾中。
+執行完成後，影片將會輸出至 `output` 資料夾中。
 
 ## 選項
 
