@@ -1,0 +1,9 @@
+/node_modules
+/.video_cache
+/input
+/output
+package-lock.json
+yarn.lock
+yarn-error.log
+m3u8
+*.m3u8
