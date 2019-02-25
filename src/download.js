@@ -1,5 +1,6 @@
 const fs = require('fs')
 const util = require('./util')
+const bar = util.progressbar()
 
 // 紀錄已經開始下載的任務數
 let downloadStartCount = 0
@@ -31,6 +32,8 @@ function download(callback) {
       // 使用 HTTP 下載影片
       http.get(obj.url, async res => {
 
+        const name = obj.name.match(/\d+\.ts$/)
+
         // 如果返回錯誤 (4xx 或 5xx)
         if (/^[45]\d{2}$/.test(res.statusCode)) {
           fs.closeSync(fd)
@@ -39,16 +42,22 @@ function download(callback) {
 
           switch (res.statusCode) {
             case 404:
-              console.error('\x1b[31m%s\x1b[0m', `影片不存在:\t${obj.name}`)
-              break;
+              bar.increment(1, {
+                text: util.textColor(`影片不存在：${name}`, 'red')
+              })
+              break
 
             case 403:
-              console.error('\x1b[31m%s\x1b[0m', `影片已過期:\t${obj.name}`)
-              break;
+              bar.increment(1, {
+                text: util.textColor(`影片已過期：${name}`, 'red')
+              })
+              break
 
             default:
-              console.error('\x1b[31m%s\x1b[0m', `下載錯誤:\t${obj.name}`)
-              break;
+              bar.increment(1, {
+                text: util.textColor(`下載錯誤：${name}`, 'red')
+              })
+              break
           }
 
           // 下載下一部影片
@@ -70,7 +79,9 @@ function download(callback) {
           }
           fs.closeSync(fd)
           downloadEndCount++
-          console.log('\x1b[32m%s\x1b[0m', `下載:\t${obj.name}`)
+          bar.increment(1, {
+            text: util.textColor(`已下載：${name}`, 'green')
+          })
 
           // 下載成功的影片信息陣列
           successObjArray.push(obj)
@@ -125,6 +136,8 @@ module.exports = opts => {
       return
     }
 
+    util.consoleSuccess(`開始下載：${opts.name}`)
+
     /**
      * 暫存資料夾
      */
@@ -164,7 +177,7 @@ module.exports = opts => {
         util.rmdir(util.cachePath(opts.name))
         util.rmdir(util.mainCachePath, false)
         reject({
-          message: '執行完成沒有匹配的連結',
+          message: '執行完成：沒有匹配的連結',
           color: 'yellow'
         })
         return
@@ -173,6 +186,8 @@ module.exports = opts => {
       /**
        * 遍歷陣列，逐個下載影片
        */
+      bar.start(objArray.length, 0, { text: '' })
+
       for (let start = downloadStartCount; downloadStartCount < objArray.length;) {
         // 如果已經超過可同時下載的最大任務數，就退出；
         // 等待有任務結束(不管成功或失敗)才繼續下載。
@@ -184,6 +199,7 @@ module.exports = opts => {
          * 下載影片
          */
         download(() => {
+          bar.stop()
           resolve(successObjArray)
         }).catch(error => {
           reject(error)

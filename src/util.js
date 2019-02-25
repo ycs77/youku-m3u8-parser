@@ -1,7 +1,7 @@
 const fs = require('fs')
 const rimraf = require('rimraf')
-const iconv = require('iconv-lite')
 const exec = require('child_process').exec
+const Progress = require('cli-progress')
 const defaultConfig = require('./default_config')
 
 /**
@@ -43,6 +43,29 @@ function rmdir(dir, force = true) {
       }
     }
   } catch (error) { }
+}
+
+/**
+ * 輸出自訂顏色文字
+ *
+ * @param {*} text
+ * @param {*} color
+ */
+function textColor(text, color) {
+  let colorCharAry = {
+    red: '\x1b[31m%s\x1b[0m',
+    green: '\x1b[32m%s\x1b[0m',
+    yellow: '\x1b[33m%s\x1b[0m',
+    blue: '\x1b[34m%s\x1b[0m',
+    magenta: '\x1b[35m%s\x1b[0m',
+    cyan: '\x1b[36m%s\x1b[0m',
+    white: '\x1b[37m%s\x1b[0m'
+  }
+
+  if (!colorCharAry[color]) {
+    return text
+  }
+  return colorCharAry[color].replace('%s', text)
 }
 
 /**
@@ -92,26 +115,13 @@ function outputPath(path = defaultConfig.output, file = null, ext = null) {
  * 輸出命令行結果
  *
  * @param {string} cmdValue
- * @param {string} encoding 可使用的編碼：https://github.com/ashtuchkin/iconv-lite/wiki/Supported-Encodings
  */
-function execCommand(cmdValue, encoding = 'utf8') {
+function execCommand(cmdValue) {
   return new Promise((resolve, reject) => {
-    exec(cmdValue, { encoding: 'binary' }, function (error, stdout, stderror) {
+    exec(cmdValue, { encoding: 'binary' }, error => {
       if (error) {
-        reject(`ERROR:\n${error}`)
+        reject(`Error:\n${error}`)
         return
-      }
-
-      if (stdout) {
-        let out = Buffer.from(stdout, 'binary')
-        out = iconv.decode(out, encoding)
-        console.log(`stdout:\n${out}`)
-      }
-
-      if (stderror) {
-        let errout = Buffer.from(stderror, 'binary')
-        errout = iconv.decode(errout, encoding)
-        console.log(`stderror:\n${errout}`)
       }
 
       resolve()
@@ -119,14 +129,50 @@ function execCommand(cmdValue, encoding = 'utf8') {
   })
 }
 
+/**
+ * 輸出成功文字
+ *
+ * @param {string} message
+ */
+function consoleSuccess(message) {
+  console.log(textColor(message, 'green'))
+}
+
+/**
+ * 輸出錯誤文字
+ *
+ * @param {string} message
+ */
+function consoleError(message) {
+  console.error(textColor(message, 'red'))
+}
+
+/**
+ * 進度條
+ */
+function progressbar(options = {}) {
+  const opts = {
+    format: '[{bar}] {percentage}% | ETA: {eta}s | {value}/{total} | {text}'
+  }
+
+  return new Progress.Bar(
+    Object.assign(opts, options),
+    Progress.Presets.shades_classic
+  )
+}
+
 module.exports = {
   m3u8UrlReg,
   mkdir,
   rmdir,
+  textColor,
   concatFile,
   mainCachePath,
   cachePath,
   cacheSplitPath,
   outputPath,
-  execCommand
+  execCommand,
+  consoleSuccess,
+  consoleError,
+  progressbar
 }

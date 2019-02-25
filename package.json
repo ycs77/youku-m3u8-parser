@@ -1,18 +1,26 @@
 {
   "name": "youku-m3u8-parser",
   "version": "1.0.0",
-  "description": "優酷影片 m3u8 解析",
+  "description": "下載優酷影片小工具 (解析 m3u8 檔、下載影片)",
   "author": "Lucas Yang",
   "license": "MIT",
-  "bin": {
-    "youku-m3u8-parser": "./bin/youku-m3u8-parser.js"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ycs77/youku-m3u8-parser.git"
+  },
+  "homepage": "https://github.com/ycs77/youku-m3u8-parser",
+  "bugs": {
+    "url": "https://github.com/ycs77/youku-m3u8-parser/issues"
   },
   "engines": {
     "node": ">=9.0.0"
   },
+  "keywords": [
+    "download"
+  ],
   "dependencies": {
+    "cli-progress": "^2.1.1",
     "commander": "^2.19.0",
-    "iconv-lite": "^0.4.19",
     "rimraf": "^2.6.3"
   }
 }

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const util = require('./util')
+const bar = util.progressbar()
 
 module.exports = (opts, videoTotal) => {
   return new Promise(async (resolve, reject) => {
@@ -52,11 +53,14 @@ module.exports = (opts, videoTotal) => {
       let group = Math.ceil(videoTotal / quantity)
 
       // 關閉預設命令行輸出
-      await util.execCommand('@echo off', opts.encoding)
+      await util.execCommand('@echo off')
 
       /**
        * 分組處裡影片
        */
+      console.log(`分組合併影片：`)
+      bar.start(videoTotal, 0, { text: '' })
+
       for (let i = 0; i < group; i++) {
         if (i * quantity >= videoTotal) {
           break
@@ -65,13 +69,14 @@ module.exports = (opts, videoTotal) => {
         // 複製影片片段組成較大的片段
         let param = ''
         for (let j = i * quantity; j < videoTotal && j < (i + 1) * quantity; j++) {
+          bar.increment()
           param += `\"${util.cachePath(opts.name, j, '.ts')}\"`
           if (j < videoTotal - 1 && j < (i + 1) * quantity - 1) {
             param += '+'
           }
         }
         cmd = `copy/b ${param} /y \"${util.cacheSplitPath(opts.name, i, '.ts')}\"`
-        await util.execCommand(cmd, opts.encoding)
+        await util.execCommand(cmd)
 
         // 串接影片名稱字串
         outputTs += util.cacheSplitPath(opts.name, i, '.ts')
@@ -80,11 +85,19 @@ module.exports = (opts, videoTotal) => {
         }
       }
 
+      bar.stop()
+
       /**
        * 合併影片
        */
+      console.log(`合併影片：`)
+      bar.start(1, 0, { text: '' })
+
       cmd = opts.ffmpeg + ' -i \"' + outputTs + '\" -c copy -bsf:a aac_adtstoasc -movflags +faststart \"' + outputVideoName + '\"'
-      await util.execCommand(cmd, opts.encoding)
+      await util.execCommand(cmd)
+
+      bar.update(1)
+      bar.stop()
 
       // 刪除快取資料夾
       util.rmdir(util.cachePath(opts.name))
