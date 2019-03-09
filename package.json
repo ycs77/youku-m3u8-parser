@@ -12,6 +12,9 @@
   "bugs": {
     "url": "https://github.com/ycs77/youku-m3u8-parser/issues"
   },
+  "bin": {
+    "youku-m3u8-parser": "./bin/youku-m3u8-parser.js"
+  },
   "engines": {
     "node": ">=9.0.0"
   },

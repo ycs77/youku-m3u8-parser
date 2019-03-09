@@ -9,7 +9,7 @@
 ## 安裝依賴
 
 * 安裝 [Node.js](https://nodejs.org/en/)
-* 安裝 [FFmpeg](https://www.ffmpeg.org/download.html)
+* 安裝 [FFmpeg](https://www.ffmpeg.org/download.html) (需加入 PATH，[點我看教學](https://jsnwork.kiiuo.com/archives/2705/ffmpeg-windows-安裝/))
 
 ## 取得優酷影片 m3u8 檔
 
@@ -20,31 +20,30 @@
 
 ## 使用
 
-執行：
+安裝：
 
 ```
-git clone git@github.com:ycs77/youku-m3u8-parser.git
-cd youku-m3u8-parser
-npm install
-mkdir input
+npm install youku-m3u8-parser -g
+```
+or
+```
+yarn global add youku-m3u8-parser
 ```
 
-將剛才下載的 m3u8 檔移至 `input` 資料夾裡。命名為 `my-video.m3u8` (`my-video` 為自訂影片名稱)。
-
-執行：
+將剛才下載的 m3u8 檔命名為 `我的影片.m3u8` (`我的影片` 為自訂影片名稱)。開啟命令行，執行：
 
 ```
-node ./bin/youku-m3u8-parser --name my-video
+youku-m3u8-parser --name "我的影片"
 ```
 
 執行完成後，影片將會輸出至 `output` 資料夾中。
 
 ### 下載全部影片
 
-解析全部的 m3u8 檔並下載影片：
+解析當前資料夾全部的 m3u8 檔(不包含子資料夾)並下載影片：
 
 ```
-node ./bin/youku-m3u8-parser --all
+youku-m3u8-parser --all
 ```
 
 ## 選項
@@ -53,6 +52,6 @@ node ./bin/youku-m3u8-parser --all
   -n, --name <name>          影片名稱 (default: "video")
   -a, --all                  解析全部的 m3u8 檔並下載影片
   -m, --max <path>           同時下載的最大任務數 (default: 10)
-  -q, --quantity <number>    輸出處理分組影片數，預設為0(不分組)。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。 (default: 0)
+  -q, --quantity <number>    輸出處理分組影片數。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。 (default: 20)
   -f, --ffmpeg <path>        FFmpeg 路徑 (default: "ffmpeg")
 ```
