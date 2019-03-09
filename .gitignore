@@ -1,5 +1,6 @@
 /node_modules
 /.video_cache
+/.test
 /input
 /output
 package-lock.json
@@ -7,3 +8,4 @@ yarn.lock
 yarn-error.log
 m3u8
 *.m3u8
+!test/assets/test.m3u8
