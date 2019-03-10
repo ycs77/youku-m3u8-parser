@@ -1,5 +1,8 @@
 # 下載優酷影片小工具
 
+[![Latest Version on NPM][ico-version]][link-npmjs]
+[![Software License][ico-license]](LICENSE)
+
 解析 m3u8 檔、下載影片
 
 > 參考：[优酷视频下载 - 『编程语言区』  - 吾爱破解](https://www.52pojie.cn/thread-571855-1-1.html)
@@ -55,3 +58,8 @@ youku-m3u8-parser --all
   -q, --quantity <number>    輸出處理分組影片數。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。 (default: 20)
   -f, --ffmpeg <path>        FFmpeg 路徑 (default: "ffmpeg")
 ```
+
+[ico-version]: https://badge.fury.io/js/youku-m3u8-parser.svg
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
+
+[link-npmjs]: https://www.npmjs.com/package/youku-m3u8-parser
