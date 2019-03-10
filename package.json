@@ -16,7 +16,8 @@
     "youku-m3u8-parser": "./bin/youku-m3u8-parser.js"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "release": "standard-version"
   },
   "engines": {
     "node": ">=9.0.0"
@@ -34,6 +35,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
-    "nock": "^10.0.6"
+    "nock": "^10.0.6",
+    "standard-version": "^5.0.1"
   }
 }
