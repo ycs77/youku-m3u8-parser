@@ -59,7 +59,7 @@ youku-m3u8-parser --all
   -f, --ffmpeg <path>        FFmpeg 路徑 (default: "ffmpeg")
 ```
 
-[ico-version]: https://badge.fury.io/js/youku-m3u8-parser.svg
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
+[ico-version]: https://img.shields.io/npm/v/youku-m3u8-parser.svg
+[ico-license]: https://img.shields.io/github/license/ycs77/youku-m3u8-parser.svg
 
 [link-npmjs]: https://www.npmjs.com/package/youku-m3u8-parser
