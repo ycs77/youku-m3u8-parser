@@ -36,7 +36,7 @@ yarn global add youku-m3u8-parser
 將剛才下載的 m3u8 檔命名為 `我的影片.m3u8` (`我的影片` 為自訂影片名稱)。開啟命令行，執行：
 
 ```
-youku-m3u8-parser --name "我的影片"
+youku-m3u8-parser "我的影片"
 ```
 
 執行完成後，影片將會輸出至 `output` 資料夾中。
