@@ -23,6 +23,9 @@
     "node": ">=9.0.0"
   },
   "keywords": [
+    "youku",
+    "m3u8",
+    "parser",
     "download"
   ],
   "dependencies": {
