@@ -2,7 +2,7 @@ const fs = require('fs')
 const util = require('../../lib/util')
 const TEST_CONST = require('../TEST_CONST')
 const start = 0
-const end = 10
+const end = 12
 
 module.exports = mode => {
   switch (mode) {

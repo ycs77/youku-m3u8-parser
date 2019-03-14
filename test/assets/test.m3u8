@@ -22,4 +22,8 @@ http://my-test-url.com/video
 http://my-test-url.com/video
 #EXTINF:10.000000,
 http://my-test-url.com/video
+#EXTINF:10.000000,
+http://my-test-url.com/video
+#EXTINF:10.000000,
+http://my-test-url.com/video
 #EXT-X-ENDLIST

@@ -52,11 +52,13 @@ youku-m3u8-parser --all
 ## 選項
 
 ```
-  -n, --name <name>          影片名稱 (default: "video")
-  -a, --all                  解析全部的 m3u8 檔並下載影片
-  -m, --max <path>           同時下載的最大任務數 (default: 10)
-  -q, --quantity <number>    輸出處理分組影片數。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。 (default: 20)
-  -f, --ffmpeg <path>        FFmpeg 路徑 (default: "ffmpeg")
+  -a, --all                解析全部的m3u8檔並下載影片
+  -i, --input <path>       m3u8資料夾 (default: "./")
+  -o, --output <path>      影片輸出資料夾 (default: "./output")
+  -m, --max <number>       同時下載的最大影片段落數 (default: 10)
+  -am, --allmax <number>   同時下載的最大任務數 (default: 3)
+  -q, --quantity <number>  輸出處理分組影片數。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。 (default: 20)
+  -f, --ffmpeg <path>      FFmpeg 路徑 (default: "ffmpeg")
 ```
 
 [ico-version]: https://img.shields.io/npm/v/youku-m3u8-parser.svg

@@ -17,7 +17,8 @@ program
   .option('-a, --all', '解析全部的m3u8檔並下載影片', false)
   .option('-i, --input <path>', 'm3u8資料夾', config.input)
   .option('-o, --output <path>', '影片輸出資料夾', config.output)
-  .option('-m, --max <path>', '同時下載的最大任務數', config.max)
+  .option('-m, --max <number>', '同時下載的最大影片段落數', config.max)
+  .option('-am, --allmax <number>', '同時下載的最大任務數', config.allmax)
   .option('-q, --quantity <number>', '輸出處理分組影片數。處理較大影片才需分組，例：輸入10，會先將10小段影片為單位合併為數個大段的影片後，再合併為完整的影片。', config.quantity)
   .option('-f, --ffmpeg <path>', 'FFmpeg 路徑', config.ffmpeg)
   .action(function (vName) {
@@ -64,18 +65,30 @@ if (program.all) {
     process.exit()
   }
 
-  // 按順序執行下載任務
-  new Promise(async () => {
-    for (const i in fileList) {
-      const promiseOpts = opts
-      promiseOpts.m3u8 = fileList[i]
-      promiseOpts.name = promiseOpts.m3u8.replace(/.m3u8$/, '')
+  let startCount = 0
 
-      try {
-        await youkuM3u8Parser(promiseOpts)
-      } catch (error) { }
+  // 執行下載任務
+  const runyoukuM3u8Parser = () => new Promise(async () => {
+    if (startCount < fileList.length) {
+      const promiseOpts = JSON.parse(JSON.stringify(opts))
+      promiseOpts.m3u8 = fileList[startCount]
+      promiseOpts.name = promiseOpts.m3u8.replace(/.m3u8$/, '')
+      startCount++
+      await youkuM3u8Parser(promiseOpts)
+      runyoukuM3u8Parser()
     }
   })
+
+  // 遍歷陣列，逐個下載影片
+  for (let start = startCount; startCount < fileList.length;) {
+    // 如果已經超過可同時下載的最大任務數，就退出；
+    // 等待有任務結束才繼續下載。
+    if (startCount === (start + opts.allmax)) {
+      break
+    }
+
+    runyoukuM3u8Parser()
+  }
 } else {
   if (!opts.m3u8) {
     opts.m3u8 = `${opts.name}.m3u8`

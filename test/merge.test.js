@@ -11,10 +11,8 @@ const util = require('../lib/util')
 const mock_video_instance = require(TEST_CONST.PATH.VIDEO_LIST)
 const mock_video_list = mock_video_instance('list')
 
-describe('Merge video test', () => {
-  before(() => {
-    test_util.before()
-
+function run(name, callback) {
+  test_util.run(name, callback, () => {
     /**
      * Set mock file
      */
@@ -25,23 +23,25 @@ describe('Merge video test', () => {
     util.mkdir(util.cachePath(TEST_CONST.NAME))
     mock_video_instance('mock_files')
   })
+}
 
-  after(() => {
-    test_util.after()
-  })
-
+describe('Merge video test', () => {
   it('M3u8 file should exist', () => {
-    expect(fs.existsSync(TEST_CONST.FILE)).to.be.true
+    run('', () => {
+      expect(fs.existsSync(TEST_CONST.FILE)).to.be.true
+    })
   })
 
-  it('Can merge videos', async () => {
-    const opts = Object.assign({}, config, {
-      name: TEST_CONST.NAME,
-      m3u8: TEST_CONST.FILE
+  it('Merge videos successfully', () => {
+    run('success', async () => {
+      const opts = Object.assign({}, config, {
+        name: TEST_CONST.NAME,
+        m3u8: TEST_CONST.FILE
+      })
+
+      await merge(opts, mock_video_list.length)
+
+      expect(fs.existsSync(util.getDir(opts.output, TEST_CONST.VIDEO))).to.be.true
     })
-
-    await merge(opts, mock_video_list.length)
-
-    expect(fs.existsSync(util.getDir(opts.output, TEST_CONST.VIDEO))).to.be.true
   })
 })

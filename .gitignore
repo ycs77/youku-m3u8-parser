@@ -1,6 +1,6 @@
 /node_modules
 /.video_cache
-/.test
+/.test*
 /input
 /output
 package-lock.json

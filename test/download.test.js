@@ -8,17 +8,24 @@ const download = require('../lib/download')
 const config = require('../lib/config')
 const util = require('../lib/util')
 
+const opts = Object.assign({}, config, {
+  name: TEST_CONST.NAME,
+  m3u8: TEST_CONST.FILE
+})
+
 // Get video file
 let mock_video = fs.readFileSync(TEST_CONST.PATH.VIDEO, 'UTF-8')
 let mock_video_list = null
 
 // nock instance
 let nock_video = null
+const getNock = code => nock('http://my-test-url.com')
+  .persist()
+  .get('/video')
+  .reply(code, mock_video)
 
-describe('Downloaded test', () => {
-  before(() => {
-    test_util.before()
-
+function run(name, callback) {
+  test_util.run(name, callback, () => {
     /**
      * Set mock file
      */
@@ -26,32 +33,58 @@ describe('Downloaded test', () => {
     fs.copyFileSync(TEST_CONST.PATH.FILE, util.getDir(TEST_CONST.FILE))
     // Get download over list
     mock_video_list = require(TEST_CONST.PATH.VIDEO_LIST)('list')
-
-    // Nock http
-    nock_video = nock('http://my-test-url.com')
-      .persist()
-      .get('/video')
-      .reply(200, mock_video)
   })
+}
 
-  after(() => {
-    // Persist false in nock
-    nock_video.persist(false)
-
-    test_util.after()
-  })
-
+describe('Downloaded test', () => {
   it('M3u8 file should exist', () => {
-    expect(fs.existsSync(TEST_CONST.FILE)).to.be.true
+    run('', () => {
+      expect(fs.existsSync(TEST_CONST.FILE)).to.be.true
+    })
   })
 
-  it('Can download video', async () => {
-    const opts = Object.assign({}, config, {
-      name: TEST_CONST.NAME,
-      m3u8: TEST_CONST.FILE
+  it('Download video successfully', () => {
+    run('success', async () => {
+      nock_video = getNock(200)
+      const result = await download(opts)
+      expect(result).to.deep.equal(mock_video_list)
+      nock_video.persist(false)
     })
+  })
 
-    const successVideoArray = await download(opts)
-    expect(successVideoArray).to.deep.equal(mock_video_list)
+  it('Download video return 403', () => {
+    run('403', async () => {
+      nock_video = getNock(403)
+      try {
+        await download(opts)
+      } catch (error) {
+        expect(error).to.equal(`下載失敗：${TEST_CONST.NAME} 影片已過期`)
+      }
+      nock_video.persist(false)
+    })
+  })
+
+  it('Download video return 404', () => {
+    run('404', async () => {
+      nock_video = getNock(404)
+      try {
+        await download(opts)
+      } catch (error) {
+        expect(error).to.equal(`下載失敗：${TEST_CONST.NAME} 影片不存在`)
+      }
+      nock_video.persist(false)
+    })
+  })
+
+  it('Download video error', () => {
+    run('500', async () => {
+      nock_video = getNock(500)
+      try {
+        await download(opts)
+      } catch (error) {
+        expect(error).to.equal(`下載失敗：${TEST_CONST.NAME} `)
+      }
+      nock_video.persist(false)
+    })
   })
 })
