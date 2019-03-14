@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.1](https://github.com/ycs77/youku-m3u8-parser/compare/v1.2.0...v1.2.1) (2019-03-14)
+
+
+### Bug Fixes
+
+* **cli:** fix no cli parameter error ([9757fe6](https://github.com/ycs77/youku-m3u8-parser/commit/9757fe6))
+
+
+
 # [1.2.0](https://github.com/ycs77/youku-m3u8-parser/compare/v1.1.0...v1.2.0) (2019-03-11)
 
 
