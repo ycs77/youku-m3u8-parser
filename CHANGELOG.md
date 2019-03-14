@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.3.0](https://github.com/ycs77/youku-m3u8-parser/compare/v1.2.1...v1.3.0) (2019-03-14)
+
+
+### Features
+
+* **cli:** optimize code & remove progressbar ([ea06044](https://github.com/ycs77/youku-m3u8-parser/commit/ea06044))
+
+
+
 ## [1.2.1](https://github.com/ycs77/youku-m3u8-parser/compare/v1.2.0...v1.2.1) (2019-03-14)
 
 
