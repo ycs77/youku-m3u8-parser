@@ -38,6 +38,6 @@
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nock": "^10.0.6",
-    "standard-version": "^5.0.1"
+    "standard-version": "^8.0.1"
   }
 }
